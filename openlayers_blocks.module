@@ -1,0 +1,60 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This file holds the main Drupal hook functions
+ * and private functions for the openlayers_blocks module.
+ *
+ * @ingroup openlayers
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function openlayers_filters_help($path, $arg) {
+  $output = '';
+
+  switch ($path) {
+    case 'admin/help#openlayers_blocks':
+      $output = '<p>'. t('The OpenLayers Blocks module provides map presets as blocks.') .'</p>';
+      return $output;
+
+  }
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function openlayers_blocks_block($op = 'list', $delta = 0, $edit = array()) {
+  // Check op
+  switch ($op) {
+    case 'list':
+      $blocks = array();
+    
+      // Get each preset
+      $presets = openlayers_presets();
+      foreach ($presets as $id => $preset) {
+        $blocks[$id]['info'] = t('OpenLayers preset') . ': ' . $preset->title;
+      }
+      
+      return $blocks;
+      
+    case 'view':
+      $block = array();
+      
+      // Render the preset
+      $preset = openlayers_preset_load($delta);
+      if (is_object($preset) && !empty($preset->data)) {
+        $block = array(
+          'subject' => $preset->title,
+          'content' => openlayers_render_map($preset->data),
+        );
+      }
+      
+      return $block;
+      break;
+      
+  }
+}
+

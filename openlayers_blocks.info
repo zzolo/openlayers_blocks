@@ -1,0 +1,6 @@
+; $Id$
+name = OpenLayers Blocks
+description = The OpenLayers Blocks module provides map presets as blocks.
+core = 6.x
+package = OpenLayers
+dependencies[] = openlayers
